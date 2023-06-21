@@ -3922,7 +3922,7 @@ void HWCSession::HandleSecureSession() {
     }
   }
   if (is_active_virtual_display) {
-    auto error = DestroyVirtualDisplay(client_id);
+    [[maybe_unused]] auto error = DestroyVirtualDisplay(client_id);
   }
 
   // If it is called during primary prepare/commit, we need to pause any ongoing commit on
