@@ -123,7 +123,7 @@ class HWCLayer {
   void SetReleaseFence(const shared_ptr<Fence> &release_fence);
   bool IsLayerCompatible() { return compatible_; }
   void IgnoreSdrHistogramMetadata(bool disable) { ignore_sdr_histogram_md_ = disable; }
-#ifdef UDFPS_ZPOS
+#if defined(UDFPS_ZPOS) || defined(OPLUS_FINGERPRINT_MASK)
   bool IsFodPressed() { return fod_pressed_; }
 #endif
 
@@ -151,7 +151,7 @@ class HWCLayer {
   bool secure_ = false;
   bool compatible_ = false;
   bool ignore_sdr_histogram_md_ = false;
-#ifdef UDFPS_ZPOS
+#if defined(UDFPS_ZPOS) || defined(OPLUS_FINGERPRINT_MASK)
   bool fod_pressed_ = false;
 #endif
 

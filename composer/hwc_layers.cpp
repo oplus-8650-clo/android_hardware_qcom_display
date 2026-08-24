@@ -698,12 +698,18 @@ HWC3::Error HWCLayer::SetLayerVisibleRegion(Region visible) {
 }
 
 HWC3::Error HWCLayer::SetLayerZOrder(uint32_t z) {
-#ifdef UDFPS_ZPOS
-  bool fod_pressed = z & FOD_PRESSED_LAYER_ZORDER;
-  if (fod_pressed_ != fod_pressed) {
+#if defined(UDFPS_ZPOS) || defined(OPLUS_FINGERPRINT_MASK)
+  bool fod_pressed = (z == 0x41000033) || (((z & 0x40000000) != 0) && ((z & 0xFF) == 0x33));
+  bool fod_dim = (z == 0x41000005) || ((z & 0x40000000) != 0 && (z & 0xFF) == 0x05);
+ if (fod_pressed_ != fod_pressed || fod_dim) {
     fod_pressed_ = fod_pressed;
-    z &= ~FOD_PRESSED_LAYER_ZORDER;
     geometry_changes_ |= kZOrder;
+  }
+
+  if (fod_pressed) {
+    z = (z == 0x41000033) ? 0x33 : (z & ~0x40000000);
+  } else if (fod_dim) {
+    z = (z == 0x41000005) ? 0x05 : (z & ~0x40000000);
   }
 #endif
 

@@ -212,6 +212,7 @@ SOONG_CONFIG_qtidisplay_ubwcp_headers := true
 SOONG_CONFIG_qtidisplay_composer_version := v2
 SOONG_CONFIG_qtidisplay_sixzone_version := v2
 SOONG_CONFIG_qtidisplay_udfps := false
+SOONG_CONFIG_qtidisplay_oplus_udfps := true
 ifeq ($(TARGET_USES_COMPOSER3),true)
     SOONG_CONFIG_qtidisplay_composer_version := v3
     $(warning "Using composer3")

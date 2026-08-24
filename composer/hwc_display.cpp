@@ -684,6 +684,7 @@ void HWCDisplay::BuildLayerStack() {
   layer_stack_.flags.use_metadata_refresh_rate = false;
   layer_stack_.flags.animating = animating_;
   layer_stack_.flags.layer_id_support = true;
+  layer_stack_.flags.fod_pressed_present = false;
   layer_stack_.solid_fill_enabled = solid_fill_enable_;
   layer_stack_.tonemapper_active = tone_mapper_ && tone_mapper_->IsActive();
 
@@ -703,13 +704,13 @@ void HWCDisplay::BuildLayerStack() {
       layer->flags.solid_fill = true;
     }
 
-#ifdef UDFPS_ZPOS
+#if defined(UDFPS_ZPOS) || defined(OPLUS_FINGERPRINT_MASK)
     if (hwc_layer->IsFodPressed()) {
       layer->flags.fod_pressed = true;
+      layer->flags.sde_preferred = true;
       layer_stack_.flags.fod_pressed_present = true;
     } else {
       layer->flags.fod_pressed = false;
-      layer_stack_.flags.fod_pressed_present = false;
     }
 #endif
 
