@@ -1497,14 +1497,16 @@ void HWDeviceDRM::SetupAtomic(Fence::ScopedRef &scoped_ref, HWLayersInfo *hw_lay
 
 #ifdef OPLUS_FINGERPRINT_MASK
   if (IsPrimaryDisplay()) {
-    uint32_t mask_state = 0;
+    uint32_t mask_state = hw_layers_info->flags.fod_mask;
 
-    for (uint32_t i = 0; i < hw_layer_count; i++) {
-      const std::string &name = hw_layers_info->hw_layers[i].layer_name;
-      if (name.find(UDFPS_DIM_LAYER_NAME) != std::string::npos) {
-        mask_state |= OPLUS_OFP_PROPERTY_DIM_LAYER;
-      } else if (name.find(UDFPS_TOUCHED_LAYER_NAME) != std::string::npos) {
-        mask_state |= OPLUS_OFP_PROPERTY_FINGERPRESS_LAYER;
+    if (!mask_state) {
+      for (uint32_t i = 0; i < hw_layer_count; i++) {
+        const std::string &name = hw_layers_info->hw_layers[i].layer_name;
+        if (name.find(UDFPS_DIM_LAYER_NAME) != std::string::npos) {
+          mask_state |= OPLUS_OFP_PROPERTY_DIM_LAYER;
+        } else if (name.find(UDFPS_TOUCHED_LAYER_NAME) != std::string::npos) {
+          mask_state |= OPLUS_OFP_PROPERTY_FINGERPRESS_LAYER;
+        }
       }
     }
 

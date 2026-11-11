@@ -48,6 +48,11 @@
 #include "hwc_tonemapper.h"
 #include "hwc_session.h"
 
+#ifdef OPLUS_FINGERPRINT_MASK
+#define OPLUS_UDFPS_NAME "UdfpsControllerOverlay"
+#define OPLUS_UDFPS_DIM_NAME "Dim Layer for UDFPS"
+#endif
+
 #ifdef QTI_BSP
 #include <hardware/display_defs.h>
 #endif
@@ -852,6 +857,15 @@ void HWCDisplay::BuildLayerStack() {
     layer->layer_id = hwc_layer->GetId();
     layer->layer_name = hwc_layer->GetName();
     layer->geometry_changes = hwc_layer->GetGeometryChanges();
+#ifdef OPLUS_FINGERPRINT_MASK
+    if (!layer->visible_regions.empty()) {
+      if (layer->layer_name.find(OPLUS_UDFPS_DIM_NAME) != std::string::npos) {
+        layer_stack_.flags.fod_mask |= 0x1;
+      } else if (layer->layer_name.find(OPLUS_UDFPS_NAME) != std::string::npos) {
+        layer_stack_.flags.fod_mask |= 0x2;
+      }
+    }
+#endif
     layer_stack_.layers.push_back(layer);
   }
 
